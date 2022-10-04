@@ -16,6 +16,7 @@ readonly ENVOY_PORT=$1
 readonly GRPC_ADDR=$2
 readonly GRPC_PORT=$3
 readonly ASSETS_PORT="8080"
+readonly ASSETS_HOST="back-static-assets"
 
 readonly CONFIG="version: '2'
 services:
@@ -32,10 +33,12 @@ services:
       # The docker port for envoy
       - ENVOY_PORT=$ENVOY_PORT
       # The host+port for the static assets server
-      - ASSETS_HOST=127.0.0.1
+      - ASSETS_HOST=$ASSETS_HOST
       - ASSETS_PORT=$ASSETS_PORT
+    network_mode: 'bridge'
     mem_limit: 1000000000
-    network_mode: 'host'
+    links:
+      - back-static-assets
   back-static-assets:
     build:
       context: ./static-assets/
@@ -46,7 +49,9 @@ services:
       # Make the port availble to linked dockers but no need
       # to forward to host machine.
       - '$ASSETS_PORT:$ASSETS_PORT'
-    mem_limit: 1000000000"
+    mem_limit: 1000000000
+    network_mode: 'bridge'
+"
 
 cd $DOCKER_DIR
 echo "$CONFIG" | docker-compose -f - up --build
