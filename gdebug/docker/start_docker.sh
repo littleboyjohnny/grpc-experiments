@@ -36,7 +36,7 @@ services:
       - ASSETS_HOST=$ASSETS_HOST
       - ASSETS_PORT=$ASSETS_PORT
     network_mode: 'bridge'
-    mem_limit: 1000000000
+    mem_limit: '1000000000'
     links:
       - back-static-assets
   back-static-assets:
@@ -49,7 +49,7 @@ services:
       # Make the port availble to linked dockers but no need
       # to forward to host machine.
       - '$ASSETS_PORT:$ASSETS_PORT'
-    mem_limit: 1000000000
+    mem_limit: '1000000000'
     network_mode: 'bridge'
 "
 
